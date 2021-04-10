@@ -18,14 +18,55 @@ void ShowAllAccInfo(void);     // ÀÜ¾×Á¶È¸
 
 enum {MAKE=1, DEPOSIT, WITHDRAW, INQUIRE, EXIT};
 
-typedef struct
+class Account
 {
+private:
 	int accID;      // °èÁÂ¹øÈ£
 	int balance;    // ÀÜ    ¾×
-	char cusName[NAME_LEN];   // °í°´ÀÌ¸§
-} Account;
+	char * cusName;   // °í°´ÀÌ¸§
 
-Account accArr[100];   // Account ÀúÀåÀ» À§ÇÑ ¹è¿­
+public:
+    Account(int accid, int bal, char * name)
+    {
+        this->accID = accid;
+        this->balance = bal;
+        cusName = new char[strlen(name)+1];
+        strcpy(cusName, name);
+    }
+    ~Account()
+    {
+        cout << "~Account()....." << endl;
+        delete [] cusName;
+    }
+    int GetAccID()
+    {
+        return this->accID;
+    }
+    void SetAccID(int id)
+    {
+        this->accID = id;
+    }
+    int GetBalance()
+    {
+        return this->balance;
+    }
+    void SetBalance(int bal)
+    {
+        this->balance = bal;
+    }
+    char * GetName()
+    {
+        return cusName;
+    }
+    void ShowAccountInfo()
+    {
+        cout << "°í°´ ¹øÈ£ :" << GetAccID() << endl;
+        cout << "°èÁÂ ÀÜ¾× :" << GetBalance() << endl;
+        cout << "°í°´ ¼º¸í :" << GetName() << endl << endl;
+    }
+};
+
+Account * accArr[100];   // Account ÀúÀåÀ» À§ÇÑ ¹è¿­
 int accNum=0;        // ÀúÀåµÈ Account ¼ö
 
 int main(void)
@@ -54,6 +95,8 @@ int main(void)
 			ShowAllAccInfo();
 			break;
 		case EXIT:
+		    for(int i=0; i<accNum; i++)
+                delete accArr[i];
 			return 0;
 		default:
 			cout<<"Illegal selection.."<<endl;
@@ -84,9 +127,10 @@ void MakeAccount(void)
 	cout<<"ÀÔ±Ý¾×: ";	cin>>balance;
 	cout<<endl;
 
-	accArr[accNum].accID=id;
-	accArr[accNum].balance=balance;
-	strcpy(accArr[accNum].cusName, name);
+	//accArr[accNum].accID=id;
+	//accArr[accNum].balance=balance;
+	//strcpy(accArr[accNum].cusName, name);
+	accArr[accNum] = new Account(id, balance, name);
 	accNum++;
 }
 
@@ -100,9 +144,11 @@ void DepositMoney(void)
 
 	for(int i=0; i<accNum; i++)
 	{
-		if(accArr[i].accID==id)
+		//if(accArr[i].accID==id)
+		if( accArr[i]->GetAccID() == id )
 		{
-			accArr[i].balance+=money;
+			//accArr[i].balance+=money;
+			accArr[i]->SetBalance( accArr[i]->GetBalance()+money );
 			cout<<"ÀÔ±Ý¿Ï·á"<<endl<<endl;
 			return;
 		}
@@ -120,15 +166,18 @@ void WithdrawMoney(void)
 
 	for(int i=0; i<accNum; i++)
 	{
-		if(accArr[i].accID==id)
+		//if(accArr[i].accID==id)
+		if( accArr[i]->GetAccID() == id )
 		{
-			if(accArr[i].balance<money)
+			//if(accArr[i].balance<money)
+			if( accArr[i]->GetBalance() < money )
 			{
 				cout<<"ÀÜ¾×ºÎÁ·"<<endl<<endl;
 				return;
 			}
 
-			accArr[i].balance-=money;
+			//accArr[i].balance-=money;
+			accArr[i]->SetBalance( accArr[i]->GetBalance() - money );
 			cout<<"Ãâ±Ý¿Ï·á"<<endl<<endl;
 			return;
 		}
@@ -140,8 +189,10 @@ void ShowAllAccInfo(void)
 {
 	for(int i=0; i<accNum; i++)
 	{
-		cout<<"°èÁÂID: "<<accArr[i].accID<<endl;
-		cout<<"ÀÌ  ¸§: "<<accArr[i].cusName<<endl;
-		cout<<"ÀÜ  ¾×: "<<accArr[i].balance<<endl<<endl;
+		//cout<<"°èÁÂID: "<<accArr[i]->GetAccID()<<endl;
+		//cout<<"ÀÌ  ¸§: "<<accArr[i]->GetName()<<endl;
+		//cout<<"ÀÜ  ¾×: "<<accArr[i]->GetBalance()<<endl<<endl;
+
+		accArr[i]->ShowAccountInfo();
 	}
 }

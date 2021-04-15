@@ -44,7 +44,7 @@ public:
         cout << "~Account()....." << endl;
         delete [] cusName;
     }
-    int GetAccID()
+    int GetAccID() const
     {
         return this->accID;
     }
@@ -52,7 +52,7 @@ public:
     {
         this->accID = id;
     }
-    int GetBalance()
+    int GetBalance() const
     {
         return this->balance;
     }
@@ -60,11 +60,11 @@ public:
     {
         this->balance = bal;
     }
-    char * GetName()
+    char * GetName() const
     {
         return cusName;
     }
-    void ShowAccountInfo()
+    void ShowAccountInfo() const
     {
         cout << "°í°´ ¹øÈ£ :" << GetAccID() << endl;
         cout << "°èÁÂ ÀÜ¾× :" << GetBalance() << endl;

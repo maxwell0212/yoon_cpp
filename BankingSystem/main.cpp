@@ -33,6 +33,12 @@ public:
         cusName = new char[strlen(name)+1];
         strcpy(cusName, name);
     }
+    // Ver0.3 복사생성자 추가.
+    Account(const Account& copy): accID(copy.accID), balance(copy.balance)
+    {
+        cusName = new char[strlen(copy.cusName)+1];
+        strcpy(cusName, copy.cusName);
+    }
     ~Account()
     {
         cout << "~Account()....." << endl;

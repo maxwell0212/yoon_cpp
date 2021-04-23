@@ -72,46 +72,26 @@ public:
     }
 };
 
-Account * accArr[100];   // Account 저장을 위한 배열
-int accNum=0;        // 저장된 Account 수
-
-int main(void)
+class AccountHandler
 {
-	int choice;
+private:
+    Account * accArr[100];   // Account 저장을 위한 배열
+    int accNum=0;        // 저장된 Account 수
+public:
+    AccountHandler();
+    void ShowMenu() const;
+    void MakeAccount();
+    void DepositMoney();
+    void WithdrawMoney();
+    void ShowAllAccInfo() const;
+    ~AccountHandler();
+};
 
-	while(1)
-	{
-		ShowMenu();
-		cout<<"선택: ";
-		cin>>choice;
-		cout<<endl;
+AccountHandler::AccountHandler(): accNum(0)
+{
 
-		switch(choice)
-		{
-		case MAKE:
-			MakeAccount();
-			break;
-		case DEPOSIT:
-			DepositMoney();
-			break;
-		case WITHDRAW:
-			WithdrawMoney();
-			break;
-		case INQUIRE:
-			ShowAllAccInfo();
-			break;
-		case EXIT:
-		    for(int i=0; i<accNum; i++)
-                delete accArr[i];
-			return 0;
-		default:
-			cout<<"Illegal selection.."<<endl;
-		}
-	}
-	return 0;
 }
-
-void ShowMenu(void)
+void AccountHandler::ShowMenu(void) const
 {
 	cout<<"-----Menu------"<<endl;
 	cout<<"1. 계좌개설"<<endl;
@@ -121,7 +101,7 @@ void ShowMenu(void)
 	cout<<"5. 프로그램 종료"<<endl;
 }
 
-void MakeAccount(void)
+void AccountHandler::MakeAccount(void)
 {
 	int id;
 	char name[NAME_LEN];
@@ -140,7 +120,7 @@ void MakeAccount(void)
 	accNum++;
 }
 
-void DepositMoney(void)
+void AccountHandler::DepositMoney(void)
 {
 	int money;
 	int id;
@@ -162,7 +142,7 @@ void DepositMoney(void)
 	cout<<"유효하지 않은 ID 입니다."<<endl<<endl;
 }
 
-void WithdrawMoney(void)
+void AccountHandler::WithdrawMoney(void)
 {
 	int money;
 	int id;
@@ -191,7 +171,7 @@ void WithdrawMoney(void)
 	cout<<"유효하지 않은 ID 입니다."<<endl<<endl;
 }
 
-void ShowAllAccInfo(void)
+void AccountHandler::ShowAllAccInfo(void) const
 {
 	for(int i=0; i<accNum; i++)
 	{
@@ -202,3 +182,44 @@ void ShowAllAccInfo(void)
 		accArr[i]->ShowAccountInfo();
 	}
 }
+AccountHandler::~AccountHandler()
+{
+    for(int i=0; i<accNum; i++)
+        delete accArr[i];
+}
+
+int main(void)
+{
+	int choice;
+    AccountHandler mgr;
+
+	while(1)
+	{
+		mgr.ShowMenu();
+		cout<<"선택: ";
+		cin>>choice;
+		cout<<endl;
+
+		switch(choice)
+		{
+		case MAKE:
+			mgr.MakeAccount();
+			break;
+		case DEPOSIT:
+			mgr.DepositMoney();
+			break;
+		case WITHDRAW:
+			mgr.WithdrawMoney();
+			break;
+		case INQUIRE:
+			mgr.ShowAllAccInfo();
+			break;
+		case EXIT:
+			return 0;
+		default:
+			cout<<"Illegal selection.."<<endl;
+		}
+	}
+	return 0;
+}
+
